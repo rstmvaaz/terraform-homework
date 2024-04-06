@@ -50,6 +50,7 @@ resource "aws_iam_group_membership" "blackpink" {
         aws_iam_user.rose.name,
         aws_iam_user.lisa.name,
         aws_iam_user.jisoo.name,
+       aws_iam_user.mieyon.name,
     ]
     group = aws_iam_group.blackpink.name
 }
@@ -61,7 +62,7 @@ resource "aws_iam_group_membership" "twice" {
         aws_iam_user.momo.name,
         aws_iam_user.dahyun.name,
         aws_iam_user.jihyo.name,
-        aws_iam_user.mieyon.name,
+        aws_iam_user.mina.name,
     ]
     group = aws_iam_group.twice.name
 }
@@ -69,6 +70,11 @@ resource "aws_iam_group_membership" "twice" {
 resource "aws_iam_user" "mina" {
   name = "mina"
 }
+ 
+#terraform import aws_iam_user.mina mina
+
 resource "aws_iam_user" "mieyon" {
   name = "mieyon"
 }
+
+##terraform import aws_iam_user.mieyon mieyon
