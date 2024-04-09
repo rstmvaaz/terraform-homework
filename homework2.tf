@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "bucket1" {
   bucket  = "kaizen-aziza"
 }
 resource "aws_s3_bucket" "bucket2" {
-  bucket_prefix = "kaizen-"
+  bucket_prefix = "kaizen-aziza"
   force_destroy = true
 }
 resource "aws_s3_bucket" "bucket3"{
