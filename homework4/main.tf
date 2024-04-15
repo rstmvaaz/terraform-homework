@@ -1,44 +1,54 @@
-provider aws {
-    region = "{var.region}"
+provider "aws" {
+  region = var.region
 }
 
-resource "aws_key_pair" "key" {
-   key_name = "{var.key_name}"
-   public_key = file("~/.ssh/id_rsa.pub")
+variable "region" {
+  type        = string
+  default     = ""
+  description = "provide region"
 }
 
-resource "aws_security_group" "SG" {
-   name = "Allow SG"
-   description = "Allow inbound traffic on ports 22,80 and 443 "
+variable "ami_id" {
+  type        = string
+  default     = ""
+  description = "provide ami id"
+}
+variable "type" {
+  type        = string
+  default     = ""
+  description = "provide instance type"
 }
 
-  
-    ingress { 
-    from_port        = var.ports[0]
-    to_port          = var.ports[0]
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-   }
-    ingress {
-    from_port        = var.ports[1]
-    to_port          = var.ports[1]
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-   }
- 
-    ingress {
-    from_port        = var.ports[2]
-    to_port          = var.ports[2]
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-   }
+variable "key" {
+  type        = string
+  default = "Bastion-key"
+  description = "The name for the key pair"
+}
+
+variable "count_vm" {
+  type        = number
+  default     = 1
+  description = "count instances"
+}
+
+variable "availability_zones" {
+  type = string
+  default = ""
+  description = "provide availibility zones"
+}
+variable ports {
+  type        = list(number)
+  default     = [22, 80, 443]
+  description = "description"
+}
 
 
-resource "aws_instance" "instance" {
-  count = "var.count"
-  ami = "var.ami_id"
-  instance_type = "var.instance_type"
-  key_name = [aws_key_pair.key.key_name]
-  security_groups = [aws_security_group.SG.name]
-  availability_zone = "var.availability_zone"
+resource "aws_instance" "vms" {
+  ami                    = var.ami_id
+  instance_type          = var.type
+  key_name               = var.key
+  vpc_security_group_ids = [aws_security_group.allow_tls.id]
+  count                  = var.count_vm
+  availability_zone      = var.availability_zones
+
 }
